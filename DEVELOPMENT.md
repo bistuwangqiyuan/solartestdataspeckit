@@ -1,264 +1,133 @@
-# 开发指南
+# 开发进度文档
 
-## 快速开始
+## 项目状态
 
-### 环境准备
+**最后更新**: 2025-09-14
+
+## 已完成的工作
+
+### 1. 项目基础架构
+- ✅ 更新package.json，添加所有必要的依赖
+- ✅ 配置TypeScript (tsconfig.json)
+- ✅ 配置Tailwind CSS
+- ✅ 配置PostCSS
+- ✅ 配置ESLint
+- ✅ 配置Jest测试框架
+- ✅ 创建项目目录结构
+
+### 2. 类型定义和工具
+- ✅ 创建类型定义文件 (src/types/index.ts)
+- ✅ 创建数据库类型定义 (src/types/database.ts)
+- ✅ 创建格式化工具 (src/utils/format.ts)
+- ✅ 创建验证工具 (src/utils/validation.ts)
+- ✅ 创建Excel处理工具 (src/utils/excel.ts)
+
+### 3. 服务层
+- ✅ 配置Supabase客户端 (src/lib/supabase.ts)
+- ✅ 创建测试记录服务 (src/services/testRecords.ts)
+- ✅ 创建产品和测试项服务 (src/services/products.ts)
+- ✅ 创建统计服务 (src/services/statistics.ts)
+
+### 4. 状态管理和Hooks
+- ✅ 创建全局状态管理 (src/store/useStore.ts)
+- ✅ 创建认证Hook (src/hooks/useAuth.ts)
+- ✅ 创建实时数据Hook (src/hooks/useRealtime.ts)
+
+### 5. UI组件
+- ✅ 创建全局样式 (src/styles/globals.css)
+- ✅ 创建布局组件 (src/components/Layout.tsx)
+- ✅ 创建侧边栏组件 (src/components/Sidebar.tsx)
+- ✅ 创建顶部导航组件 (src/components/Header.tsx)
+- ✅ 创建加载动画组件 (src/components/LoadingSpinner.tsx)
+
+### 6. 页面开发
+- ✅ 更新_app.js，添加Toast通知
+- ✅ 创建登录页面 (pages/login.tsx)
+- ✅ 创建仪表盘页面 (pages/dashboard.tsx)
+- ✅ 创建数据管理页面 (pages/data.tsx)
+- ✅ 创建数据导入页面 (pages/import.tsx)
+- ✅ 更新首页重定向到仪表盘
+
+## 待完成的工作
+
+### 1. Supabase配置
+- ❌ 创建Supabase项目
+- ❌ 执行数据库表创建脚本
+- ❌ 配置Row Level Security
+- ❌ 创建视图和函数
+- ❌ 配置实时订阅
+
+### 2. 页面开发
+- ❌ 数据分析页面 (pages/analysis.tsx)
+- ❌ 报表中心页面 (pages/reports.tsx)
+- ❌ 产品管理页面 (pages/products.tsx)
+- ❌ 用户管理页面 (pages/users.tsx)
+
+### 3. 功能完善
+- ❌ 实现真实的用户认证
+- ❌ 完善数据导入功能（匹配产品ID、测试项ID）
+- ❌ 实现数据导出功能
+- ❌ 实现报表生成功能
+- ❌ 实现异常检测算法
+- ❌ 实现数据编辑和删除功能
+
+### 4. 测试
+- ❌ 编写单元测试
+- ❌ 编写集成测试
+- ❌ 编写E2E测试
+- ❌ 性能测试
+- ❌ 安全测试
+
+### 5. 部署
+- ❌ 配置环境变量
+- ❌ 优化构建配置
+- ❌ 部署到Netlify
+- ❌ 配置自定义域名
+
+## 环境配置
+
+### 需要创建的环境变量 (.env.local)
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Supabase数据库表结构
+
+需要在Supabase中执行以下SQL创建表：
+
+```sql
+-- 参考 spec-kit/specs/system-architecture.md 中的数据库设计
+```
+
+## 测试账号
+
+系统预设了以下测试账号（需要在Supabase中创建）：
+
+- 管理员：admin@example.com / admin123
+- 操作员：operator@example.com / operator123
+- 查看者：viewer@example.com / viewer123
+
+## 运行项目
+
 ```bash
 # 安装依赖
 npm install
 
-# 复制环境变量文件
-cp .env.local.example .env.local
-
-# 启动开发服务器
+# 运行开发服务器
 npm run dev
-```
 
-### 开发工具
-- **VS Code** 推荐扩展：
-  - ESLint
-  - Prettier
-  - Tailwind CSS IntelliSense
-  - TypeScript Vue Plugin
+# 构建生产版本
+npm run build
 
-### 代码规范
-
-#### TypeScript 规范
-```typescript
-// ✅ 好的做法
-interface TestRecord {
-  id: string
-  deviceSn: string
-  testDate: Date
-  result: 'PASS' | 'FAIL'
-}
-
-// ❌ 避免
-interface test_record {
-  ID: any
-  device_sn: string
-  test_date: string
-  Result: string
-}
-```
-
-#### 组件规范
-```tsx
-// ✅ 推荐的组件结构
-interface DataTableProps {
-  data: TestRecord[]
-  onSort?: (field: string) => void
-  loading?: boolean
-}
-
-export default function DataTable({ 
-  data, 
-  onSort, 
-  loading = false 
-}: DataTableProps) {
-  // 组件逻辑
-}
-```
-
-#### 样式规范
-```tsx
-// ✅ 使用 Tailwind CSS 类
-<div className="bg-gray-900 p-4 rounded-lg shadow-lg">
-  <h2 className="text-xl font-bold text-gray-100">标题</h2>
-</div>
-
-// ✅ 复杂样式使用 CSS Modules
-<div className={styles.customChart}>
-  {/* 图表内容 */}
-</div>
-```
-
-### Git 工作流
-
-#### 分支策略
-- `main` - 生产环境分支
-- `develop` - 开发分支
-- `feature/*` - 功能分支
-- `bugfix/*` - 缺陷修复分支
-- `hotfix/*` - 紧急修复分支
-
-#### 提交规范
-```bash
-# 功能开发
-git commit -m "feat: 添加Excel数据导入功能"
-
-# 缺陷修复
-git commit -m "fix: 修复大文件上传超时问题"
-
-# 文档更新
-git commit -m "docs: 更新API使用说明"
-
-# 样式调整
-git commit -m "style: 优化数据表格样式"
-
-# 重构
-git commit -m "refactor: 重构数据验证逻辑"
-
-# 测试
-git commit -m "test: 添加数据导入单元测试"
-
-# 构建
-git commit -m "chore: 更新依赖版本"
-```
-
-### 项目结构
-```
-src/
-├── components/          # 可复用组件
-│   ├── common/         # 通用组件
-│   ├── charts/         # 图表组件
-│   └── dashboard/      # 大屏组件
-├── pages/              # 页面路由
-├── lib/                # 工具函数
-│   ├── supabase.ts    # Supabase客户端
-│   ├── utils.ts       # 通用工具
-│   └── validators.ts  # 数据验证
-├── hooks/              # 自定义Hooks
-├── services/           # API服务
-├── types/              # TypeScript类型
-└── styles/             # 全局样式
-```
-
-### 数据流架构
-```
-用户交互 → React组件 → Hooks → Services → Supabase → PostgreSQL
-    ↑                                              ↓
-    ←←←←←←←← 状态更新 ←←←←← Realtime订阅 ←←←←←←←←
-```
-
-### 性能优化建议
-
-#### 1. 代码分割
-```typescript
-// 动态导入大型组件
-const DashboardScreen = dynamic(
-  () => import('@/components/dashboard/DashboardScreen'),
-  { 
-    loading: () => <DashboardSkeleton />,
-    ssr: false 
-  }
-)
-```
-
-#### 2. 数据缓存
-```typescript
-// 使用SWR进行数据缓存
-const { data, error, mutate } = useSWR(
-  `/api/test-records`,
-  fetcher,
-  {
-    refreshInterval: 30000, // 30秒刷新
-    revalidateOnFocus: false
-  }
-)
-```
-
-#### 3. 图片优化
-```tsx
-import Image from 'next/image'
-
-<Image
-  src="/logo.png"
-  alt="Logo"
-  width={200}
-  height={50}
-  priority
-/>
-```
-
-### 测试指南
-
-#### 单元测试
-```bash
-# 运行所有测试
+# 运行测试
 npm test
-
-# 运行特定测试
-npm test -- DataTable.test.tsx
-
-# 查看覆盖率
-npm run test:coverage
 ```
 
-#### E2E测试
-```bash
-# 启动Cypress
-npm run cypress:open
+## 注意事项
 
-# 无头模式运行
-npm run cypress:run
-```
-
-### 调试技巧
-
-#### 1. React DevTools
-- 安装React Developer Tools浏览器扩展
-- 查看组件树和状态
-
-#### 2. Supabase调试
-```typescript
-// 启用调试日志
-const supabase = createClient(url, key, {
-  global: {
-    headers: {
-      'x-debug-mode': 'true'
-    }
-  }
-})
-```
-
-#### 3. 网络请求调试
-```typescript
-// 添加请求拦截器
-if (process.env.NODE_ENV === 'development') {
-  console.log('API Request:', { url, method, data })
-}
-```
-
-### 常见问题
-
-#### Q: 如何处理Supabase连接错误？
-```typescript
-try {
-  const { data, error } = await supabase
-    .from('test_records')
-    .select('*')
-    
-  if (error) throw error
-  return data
-} catch (error) {
-  console.error('Supabase error:', error)
-  // 显示用户友好的错误信息
-  toast.error('数据加载失败，请稍后重试')
-}
-```
-
-#### Q: 如何优化大数据表格性能？
-```typescript
-// 使用虚拟滚动
-import { useVirtualizer } from '@tanstack/react-virtual'
-
-// 分页加载
-const PAGE_SIZE = 50
-const { data } = useSWR(
-  `/api/test-records?page=${page}&limit=${PAGE_SIZE}`
-)
-```
-
-### 部署检查清单
-
-- [ ] 环境变量配置正确
-- [ ] 所有测试通过
-- [ ] 构建无错误
-- [ ] 性能指标达标
-- [ ] 安全扫描通过
-- [ ] 文档更新完成
-
----
-
-**更新日期**: 2025-09-13
+1. 当前项目使用了模拟数据，需要连接真实的Supabase数据库
+2. 图表功能需要真实数据才能正常显示
+3. 认证功能需要配置Supabase Auth
+4. 文件上传功能需要配置Supabase Storage
+5. 实时功能需要配置Supabase Realtime
